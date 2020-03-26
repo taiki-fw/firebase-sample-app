@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./App.css";
 import firebase from "./firebase";
+import Input from "./Components/Input";
 
 interface UserStatus {
   user: firebase.User | null;
@@ -42,6 +43,7 @@ class App extends React.Component {
         ) : (
           <button onClick={this.login}>Google Login</button>
         )}
+        <Input />
       </div>
     );
   }
