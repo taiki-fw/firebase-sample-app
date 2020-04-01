@@ -9,13 +9,16 @@ const App = () => {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      setUser(user);
+      if (user) {
+        setUser(user);
+      }
     });
-  }, [user]);
+  }, []);
 
   const login = useCallback(() => {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
+    const firebaseAuth = firebase.auth();
+    firebaseAuth.signInWithRedirect(provider);
   }, []);
 
   const logout = useCallback(() => {
@@ -39,8 +42,12 @@ const App = () => {
       ) : (
         <button onClick={login}>Google Login</button>
       )}
-      <Input />
-      <Content />
+      {user ? (
+        <>
+          <Input uid={user?.uid} />
+          <Content uid={user?.uid} />
+        </>
+      ) : null}
     </div>
   );
 };

@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
 
-const Component = () => {
+type User = {
+  uid?: string;
+};
+
+const Component: React.FC<User> = props => {
   const [posts, setPosts] = useState<any>();
 
   useEffect(() => {
     firebase
       .firestore()
       .collection("posts")
+      .where("uid", "==", props.uid)
       .onSnapshot(querySnapshot => {
         const datas: any = [];
         querySnapshot.forEach(doc => {
@@ -15,7 +20,7 @@ const Component = () => {
         });
         setPosts(datas);
       });
-  }, []);
+  }, [props.uid]);
 
   return (
     <div>

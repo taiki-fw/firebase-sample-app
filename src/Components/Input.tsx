@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import firebase from "../firebase";
 
-const Component = () => {
+type User = {
+  uid?: string;
+};
+
+const Component: React.FC<User> = props => {
   const [message, setMessage] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
@@ -21,16 +25,16 @@ const Component = () => {
       .collection("posts")
       .add({
         title,
-        content
+        content,
+        uid: props.uid
       })
-      .then(function(docRef) {
-        console.log("Document written with ID: ", docRef.id);
+      .then(() => {
         setMessage("");
         // 保存出来たら中身を空にする
         setTitle("");
         setContent("");
       })
-      .catch(function(error) {
+      .catch(error => {
         setMessage("エラー：入力内容が保存されませんでした");
         console.error("Error adding document: ", error);
       });
@@ -40,17 +44,22 @@ const Component = () => {
     <div>
       <p style={{ backgroundColor: "red", color: "white" }}>{message}</p>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-        />
+        <label>
+          タイトル：
+          <input
+            type="text"
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+          />
+        </label>
         <br />
+        <p>コンテンツ</p>
         <textarea
           name="content"
           cols={30}
           rows={10}
           value={content}
+          placeholder="記載内容"
           onChange={e => setContent(e.target.value)}
         ></textarea>
         <br />
