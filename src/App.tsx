@@ -15,7 +15,6 @@ class App extends React.Component {
 
   public componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      console.log(user);
       this.setState({ user });
     });
   }
@@ -32,13 +31,16 @@ class App extends React.Component {
   public render() {
     return (
       <div className="App">
+        <img
+          src={this.state.user?.photoURL || ""}
+          alt="ログインユーザーのアイコン"
+          width="200"
+          height="200"
+          style={{ borderRadius: "50%" }}
+        />
         <p className="App-intro">
-          名前: {this.state.user && this.state.user.displayName}
+          {this.state.user && this.state.user.displayName}
         </p>
-        <p className="App-intro">
-          UID: {this.state.user && this.state.user.uid}
-        </p>
-
         {this.state.user ? (
           <button onClick={this.logout}>Google Logout</button>
         ) : (
